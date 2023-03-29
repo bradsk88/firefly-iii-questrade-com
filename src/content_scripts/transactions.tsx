@@ -15,9 +15,6 @@ import {isSingleAccountBank} from "../extensionid";
 import {backToAccountsPage} from "./auto_run/transactions";
 import {debugLog} from "./auto_run/debug";
 
-// TODO: You will need to update manifest.json so this file will be loaded on
-//  the correct URL.
-
 interface TransactionScrape {
     pageAccount: PageAccount;
     pageTransactions: TransactionStore[];
@@ -99,9 +96,12 @@ function addButton() {
     button.id = buttonId;
     button.textContent = "Export Transactions"
     button.addEventListener("click", async () => doScrape(false), false);
-    // TODO: Try to steal styling from the page to make this look good :)
-    button.classList.add("some", "classes", "from", "the", "page");
-    getButtonDestination().append(button);
+    button.classList.add("segmented-button__item","ng-scope","segmented-button__item__selected")
+    button.style.marginLeft = "32px";
+    const container = document.createElement("div");
+    container.classList.add("segmented-button-bordered","segmented-button-light","left","ng-isolate-scope","segmented-button")
+    container.append(button);
+    getButtonDestination().append(container);
 }
 
 function enableAutoRun() {
@@ -132,8 +132,7 @@ function enableAutoRun() {
     });
 }
 
-// TODO: Set this to your transactions page URL
-const txPage = 'accounts/main/details';
+const txPage = 'trading/account/balances';
 
 runOnURLMatch(txPage, () => pageAlreadyScraped = false);
 
@@ -154,7 +153,6 @@ runOnContentChange(
 runOnContentChange(
     txPage,
     enableAutoRun,
-    // TODO: Change this to an element that is on the page once transactions have loaded
-    () => document.querySelector('app-root')!,
+    () => document.querySelector('div.balances-view.lg')!,
     'txAutoRun',
 );

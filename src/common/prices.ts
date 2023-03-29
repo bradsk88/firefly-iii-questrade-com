@@ -4,6 +4,9 @@ export function priceFromString(
     const stripped = str
         .replace('$', '')
         .replaceAll(',', '')
+        .replaceAll(')', '')
+        .replaceAll('(', '')
         .replaceAll(' ', '');
-    return Number.parseFloat(stripped);
+    const number = Number.parseFloat(stripped);
+    return str.includes("(") || str.includes(")") ? -number : number;
 }

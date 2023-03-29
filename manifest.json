@@ -1,7 +1,7 @@
 {
-  "name": "My Firefly III OAuth2 Extension",
+  "name": "Questrade -> Firefly III",
   "version": "1.0",
-  "description": "Description goes here",
+  "description": "Scrapes account and transaction data from Questrade into Firefly III",
   "permissions": [
     "storage",
     "tabs"
@@ -22,39 +22,20 @@
   "content_scripts": [
     {
       "matches": [
-        "https://*.example.com/*"
+        "https://my.questrade.com/trading/account/balances"
       ],
       "js": [
-        "./dist/auto.js"
-      ]
-    },
-    {
-      "matches": [
-        "https://*.example.com/*"
-      ],
-      "js": [
-        "./dist/accounts.js"
-      ]
-    },
-    {
-      "matches": [
-        "https://*.example.com/*"
-      ],
-      "js": [
+        "./dist/auto.js",
+        "./dist/accounts.js",
         "./dist/transactions.js"
-      ]
-    },
-    {
-      "matches": [
-        "https://*.example.com/*"
-      ],
-      "js": [
-        "./dist/opening.js"
       ]
     }
   ],
   "action": {
     "default_popup": "options.html"
+  },
+  "icons": {
+    "128": "icon-128.png"
   },
   "manifest_version": 3
 }

@@ -7,6 +7,7 @@ describe('priceFromString', () => {
         '$-3.23': -3.23,
         ' - $4.34': -4.34,
         '$1,000.00': 1000,
+        '$(100.00)': -100,
     }
     Object.entries(cases).forEach(
         ([input, output]: [string, number]): void => {

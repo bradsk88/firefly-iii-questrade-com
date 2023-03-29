@@ -15,6 +15,7 @@ import {openAccountForAutoRun} from "./auto_run/accounts";
 import {runOnURLMatch} from "../common/buttons";
 import {runOnContentChange} from "../common/autorun";
 import {debugLog} from "./auto_run/debug";
+import {extensionBankName} from "../extensionid";
 
 let pageAlreadyScraped = false;
 export let navigating = false;
@@ -33,11 +34,9 @@ async function scrapeAccountsFromPage(isAutoRun: boolean): Promise<AccountStore[
         throw new Error("Accounts are not present yet.")
     }
     const accounts = accountElements.map(element => {
-        const accountNumber = getAccountNumber(element)
+        const accountNumber = getAccountNumber()
         const accountName = getAccountName(element);
         const openingBalance = getOpeningBalance(element);
-        // TODO: Double-check these values. You may need to update them based
-        //  on the account element or bank.
         let openingBalanceBalance: string | undefined;
         if (openingBalance) {
             openingBalanceBalance = `${openingBalance.balance}`;
@@ -45,7 +44,7 @@ async function scrapeAccountsFromPage(isAutoRun: boolean): Promise<AccountStore[
         const as: AccountStore = {
             // iban: "12345", // Not all banks have an IBAN
             // bic: "123", // Not all banks have an BIC
-            name: accountName,
+            name: `${extensionBankName} - ${accountName}`,
             accountNumber: accountNumber,
             openingBalance: openingBalanceBalance,
             openingBalanceDate: openingBalance?.date,
@@ -75,7 +74,12 @@ function addButton() {
     button.id = buttonId;
     button.textContent = "Export Accounts"
     button.addEventListener("click", () => scrapeAccountsFromPage(false), false);
-    getButtonDestination().append(button);
+    button.classList.add("segmented-button__item","ng-scope","segmented-button__item__selected")
+    button.style.marginLeft = "32px";
+    const container = document.createElement("div");
+    container.classList.add("segmented-button-bordered","segmented-button-light","left","ng-isolate-scope","segmented-button")
+    container.append(button);
+    getButtonDestination().append(container);
 }
 
 function enableAutoRun() {
@@ -108,7 +112,7 @@ function enableAutoRun() {
     });
 }
 
-const accountsUrl = 'accounts/main/details'; // TODO: Set this to your accounts page URL
+const accountsUrl = 'trading/account/balances';
 
 runOnURLMatch(accountsUrl, () => {
     pageAlreadyScraped = false;
